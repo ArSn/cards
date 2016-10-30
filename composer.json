@@ -1,0 +1,10 @@
+{
+    "name": "ArSn/cards",
+    "description": "An open source card game with websockets.",
+    "keywords": ["cards"],
+    "license": "MIT",
+    "type": "project",
+    "require": {
+        "cboden/ratchet": "^0.3.5"
+    }
+}
