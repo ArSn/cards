@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Cards</title>
+	<script type="text/javascript" src="http://www.google.com/jsapi"></script>
+	<script type="text/javascript">
+		google.load("jquery", "1.3.2");
+		google.load("jqueryui", "1.7.2");
+	</script>
+	<script type="text/javascript" src="multidraggable/js/ui.multidraggable.js"></script>
+	<style>
+		html, body {
+			width: 100%;
+			height: 100%;
+			padding: 0;
+			margin: 0;
+		}
+	</style>
+</head>
+
+<body>
+<div id="lobby">
+	Players:
+	<ul id="playerList">
+	</ul>
+	<button id="startButton" style="display: none;">Start</button>
+</div>
+<div id="game" style="display: none; width: 100%; height: 100%">
+	<img src="king.png" id="king" class="multidraggable" style="position: absolute; left: 50%; top: 50%;" />
+</div>
+
+<script>
+
+	$(document).ready(function() {
+
+		var conn = new WebSocket('ws://localhost:8080');
+		conn.onopen = function (e) {
+			console.log("Connection established!");
+
+			var name = prompt('name?');
+			if (typeof name !== 'undefined') {
+				console.log('sending name' , name);
+				conn.send('name;' + name);
+			}
+		};
+
+		conn.onmessage = function (e) {
+			console.log('message received: ' + e.data);
+			var payload = e.data.split(';');
+			var command = payload[0];
+			payload.splice(0, 1);
+
+			switch (command) {
+				case 'lobby': {
+					var name;
+					var $playerList = $('#playerList');
+					$playerList.html('');
+					for (name of payload) {
+						name = $('<li>').html(name);
+						name.appendTo($playerList);
+					}
+					if (payload.length == 2) {
+						$('#startButton').show();
+					}
+					break;
+				}
+				case 'game': {
+					if (payload == 'start') {
+						$('#lobby').hide();
+						$('#game').show();
+					}
+					break;
+				}
+				case 'move': {
+					console.log('moving');
+					var $king = $('#king');
+					$king.css('left', payload[0] + '%');
+					$king.css('top', payload[1] + '%');
+					break;
+				}
+			}
+		};
+
+
+		$('#startButton').click(function() {
+			conn.send('start');
+		});
+
+
+		$(".multidraggable").multidraggable({
+			start: function() {
+//					console.log('start');
+			},
+			drag: function() {
+//					console.log('drag');
+			},
+			stop: function(event) {
+				var $element = $(event.srcElement);
+				var $parent = $element.parent();
+				var left = (parseInt($element.css('left')) / $parent[0].clientWidth) * 100;
+				var top = (parseInt($element.css('top')) / $parent[0].clientHeight) * 100;
+				conn.send('move;' + left + ';' + top);
+			}
+		});
+
+	});
+
+</script>
+</body>
+
+</html>
