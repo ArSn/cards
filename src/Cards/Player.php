@@ -7,6 +7,7 @@ use Ratchet\ConnectionInterface;
 class Player implements ConnectionInterface
 {
 	private $connection;
+	private $game;
 	private $name = '';
 
 	public function __construct(ConnectionInterface $connection)
@@ -42,4 +43,20 @@ class Player implements ConnectionInterface
 	function close()
 	{
 		$this->connection->close();
-}}
+	}
+
+	public function getConnection()
+	{
+		return $this->connection;
+	}
+
+	public function setGame(Game $game)
+	{
+		$this->game = $game;
+	}
+
+	public function getGame()
+	{
+		return $this->game;
+	}
+}

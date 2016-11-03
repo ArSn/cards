@@ -109,6 +109,12 @@
 					break;
 				}
 				case 'draw': {
+					if (payload[0] == 'opposing') {
+						var $opposingHand = $('#opposingHand');
+						var $opposingCard = $('<img src="img/cards/back.jpg" style="width: 100px; height: 140px;" />');
+						$opposingCard.appendTo($opposingHand);
+						break;
+					}
 					var $ownHand = $('#ownHand');
 					var $newCard = $('<img src="img/cards/' + payload[0] + '.svg" style="width: 100px; height: 140px;" />');
 					$newCard.appendTo($ownHand);

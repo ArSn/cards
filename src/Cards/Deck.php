@@ -3,7 +3,14 @@ namespace Cards;
 
 class Deck
 {
+	/**
+	 * @var Card[]
+	 */
 	private $cards = [];
+	/**
+	 * @var Game
+	 */
+	private $game;
 
 	public function __construct()
 	{
@@ -37,8 +44,16 @@ class Deck
 		shuffle($this->cards);
 	}
 
-	public function draw() : Card
+	public function draw()
 	{
-		return array_pop($this->cards);
+		$card = array_pop($this->cards);
+		$game = $this->game;
+		$game->sendToOwnPlayer('draw;' . $card->getShortCode());
+		$game->sendToOpposingPlayers('draw;opposing');
+	}
+
+	public function setGame(Game $game)
+	{
+		$this->game = $game;
 	}
 }
