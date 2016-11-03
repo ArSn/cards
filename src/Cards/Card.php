@@ -9,12 +9,14 @@ class Card
 	const SUIT_HEARTS = 'H';
 	const SUIT_DIAMONDS = 'D';
 	const SUIT_CLUBS = 'C';
+	const SUIT_JOKER = 'J';
 
 	const SUITS = [
 		self::SUIT_SPADES,
 		self::SUIT_HEARTS,
 		self::SUIT_DIAMONDS,
 		self::SUIT_CLUBS,
+		self::SUIT_JOKER,
 	];
 
 	private $value;
