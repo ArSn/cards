@@ -79,6 +79,15 @@ class Router implements MessageComponentInterface
 
 				break;
 			}
+			case 'draw': {
+				$this->games->rewind();
+				/** @var Game $game */
+				$game = $this->games->current();
+				$card = $game->getDeck()->draw();
+				$result = 'draw;' . $card->getShortCode();
+				$sendToAll = true;
+				break;
+			}
 			case 'move': {
 				$handler = new MoveHandler();
 				$result = $handler->process($fullMsg);

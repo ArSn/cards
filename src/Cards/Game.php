@@ -6,6 +6,9 @@ use SplObjectStorage;
 class Game
 {
 	private $players;
+	/**
+	 * @var Deck
+	 */
 	private $deck;
 
 	public function __construct(Player $player1, Player $player2)
@@ -25,5 +28,10 @@ class Game
 		$this->deck = new Deck();
 
 
+	}
+
+	public function getDeck()
+	{
+		return $this->deck;
 	}
 }

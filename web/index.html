@@ -17,7 +17,7 @@
 			margin: 0;
 		}
 		#game {
-			/*display: none;*/
+			display: none;
 			width: 100%;
 			height: 100%
 		}
@@ -28,16 +28,25 @@
 		#table {
 			height: 84%;
 			background-color: burlywood;
+			position: relative;
 		}
 		#ownHand {
 			height: 8%;
 			background-color: chartreuse;
 		}
+		#pile {
+			position: absolute;
+			left: calc(50% - 50px);
+			top: calc(50% - 70px);
+			width: 100px;
+			height: 140px;
+			cursor: pointer;
+		}
 	</style>
 </head>
 
 <body>
-<div id="lobby" style="display: none;">
+<div id="lobby">
 	Players:
 	<ul id="playerList">
 	</ul>
@@ -46,7 +55,7 @@
 <div id="game">
 	<div id="opposingHand"></div>
 	<div id="table">
-		<img src="king.png" id="king" class="multidraggable" style="position: absolute; left: 50%; top: 50%;" />
+		<img id="pile" src="img/cards/back.jpg" />
 	</div>
 	<div id="ownHand"></div>
 </div>
@@ -94,10 +103,15 @@
 					break;
 				}
 				case 'move': {
-					console.log('moving');
 					var $king = $('#king');
 					$king.css('left', payload[0] + '%');
 					$king.css('top', payload[1] + '%');
+					break;
+				}
+				case 'draw': {
+					var $ownHand = $('#ownHand');
+					var $newCard = $('<img src="img/cards/' + payload[0] + '.svg" style="width: 100px; height: 140px;" />');
+					$newCard.appendTo($ownHand);
 					break;
 				}
 			}
@@ -106,6 +120,10 @@
 
 		$('#startButton').click(function() {
 			conn.send('start');
+		});
+
+		$('#pile').click(function() {
+			conn.send('draw');
 		});
 
 
