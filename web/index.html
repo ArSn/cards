@@ -95,7 +95,6 @@
 
 			var name = prompt('name?');
 			if (typeof name !== 'undefined') {
-				console.log('sending name' , name);
 				conn.send('name;' + name);
 			}
 		};
@@ -150,7 +149,6 @@
 					if ($ownCards.length > 1) {
 						var mostRight;
 						$ownCards.each(function(index, card) {
-							console.log(card);
 							var $card = $(card);
 							if (mostRight == null || $card.position().left > mostRight.position().left) {
 								mostRight = $card;
