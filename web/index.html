@@ -177,8 +177,9 @@
 		$('#table').droppable({
 			drop: function( event, ui ) {
 
-				$( event.srcElement ).appendTo('#table');
-				dragStop(event);
+				var $card = $(event.srcElement);
+				$card.removeClass('owncard');
+				$card.addClass('commoncard');
 			}
 		});
 
