@@ -61,7 +61,7 @@
 <div id="board">
 	<div id="opposingHand"></div>
 	<div id="table">
-		<img id="pile" src="img/cards/back.jpg" />
+		<img id="pile" src="img/cards/back.svg" />
 	</div>
 	<div id="ownHand"></div>
 </div>
@@ -87,6 +87,21 @@
 //					console.log('drag');
 				},
 				stop: dragStop
+			});
+		};
+
+		var refreshCommonCardEvents = function() {
+			// todo: tabbing has to be transmitted to other client
+			$('.commoncard').dblclick(function(event) {
+				var $card = $(event.srcElement);
+				var isTabbed = $card.data('tabbed');
+				if (isTabbed) {
+					$card.css('transform', 'rotate(0deg)');
+					$card.data('tabbed', false);
+				} else {
+					$card.css('transform', 'rotate(90deg)');
+					$card.data('tabbed', true);
+				}
 			});
 		};
 
@@ -160,7 +175,7 @@
 				}
 				case 'draw': {
 					if (payload[0] == 'opposing') {
-						var $opposingCard = $('<img src="img/cards/back.jpg" style="width: 100px; height: 140px;" class="opposingcard" />');
+						var $opposingCard = $('<img src="img/cards/back.svg" style="width: 100px; height: 140px;" class="opposingcard" />');
 						$opposingCard.appendTo($opposingHand);
 						break;
 					}
@@ -206,6 +221,7 @@
 
 					conn.send('show;' + $card.data('id'));
 					dragStop(event);
+					refreshCommonCardEvents();
 				}
 			}
 		});
