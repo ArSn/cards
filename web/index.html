@@ -4,6 +4,7 @@
 	<meta charset="UTF-8">
 	<title>Cards</title>
 	<script type="text/javascript" src="http://www.google.com/jsapi"></script>
+	<!--suppress JSUnresolvedVariable -->
 	<script type="text/javascript">
 		google.load("jquery", "1.3.2");
 		google.load("jqueryui", "1.7.2");
@@ -100,7 +101,7 @@
 		};
 
 		var conn = new WebSocket('ws://localhost:8080');
-		conn.onopen = function (e) {
+		conn.onopen = function () {
 			console.log("Connection established!");
 
 			var name = prompt('name?');
@@ -189,7 +190,7 @@
 		});
 
 		$('#table').droppable({
-			drop: function( event, ui ) {
+			drop: function( event ) {
 
 				var $card = $(event.srcElement);
 
