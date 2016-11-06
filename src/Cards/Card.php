@@ -58,6 +58,11 @@ class Card
 		return $this->value;
 	}
 
+	public function getId()
+	{
+		return spl_object_hash($this);
+	}
+
 	/**
 	 * Short code for handling of this card in communication. This is a combination of value and suite codes, e.g.
 	 * (K)ing of (H)earts would be "KH" or (7) of (C)lubs would be "7C".

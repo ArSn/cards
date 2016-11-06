@@ -141,7 +141,8 @@
 					}
 					var $board = $('#board');
 					var $ownHand = $('#ownHand');
-					var $newCard = $('<img src="img/cards/' + payload[0] + '.svg" class="multidraggable card owncard" />');
+					var $newCard = $('<img src="img/cards/' + payload[1] + '.svg" class="multidraggable card owncard" />');
+					$newCard.data('id', payload[0]);
 					$newCard.appendTo($board);
 					$newCard.css('top', $ownHand.position().top + 'px');
 

@@ -48,7 +48,7 @@ class Deck
 	{
 		$card = array_pop($this->cards);
 		$game = $this->game;
-		$game->sendToOwnPlayer('draw;' . $card->getShortCode());
+		$game->sendToOwnPlayer('draw;' . $card->getId() . ';' . $card->getShortCode());
 		$game->sendToOpposingPlayers('draw;opposing');
 	}
 
