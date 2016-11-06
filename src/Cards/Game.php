@@ -1,6 +1,7 @@
 <?php
 namespace Cards;
 
+use LogicException;
 use SplObjectStorage;
 
 class Game
@@ -15,6 +16,10 @@ class Game
 	 * @var Deck
 	 */
 	private $deck;
+	/**
+	 * @var Card[]
+	 */
+	private $cardsInGame;
 
 	public function __construct(Player $player1, Player $player2)
 	{
@@ -38,6 +43,23 @@ class Game
 	public function getDeck()
 	{
 		return $this->deck;
+	}
+
+	public function addCardToGame(Card $card)
+	{
+		$this->cardsInGame[] = $card;
+	}
+
+	public function showCard($cardId)
+	{
+		foreach ($this->cardsInGame as $card) {
+			if ($card->getId() == $cardId) {
+				$this->sendToOpposingPlayers('show;' . $card->getId() . ';' . $card->getShortCode());
+				return;
+			}
+		}
+
+		throw new LogicException('Card with ID "' . $cardId . '" was not found in this deck.');
 	}
 
 	public function sendToAllPlayers($msg)
