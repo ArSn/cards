@@ -13,9 +13,9 @@ class Game
 
 	private $currentPlayer;
 	/**
-	 * @var Deck
+	 * @var Pack
 	 */
-	private $deck;
+	private $pack;
 	/**
 	 * @var Card[]
 	 */
@@ -36,13 +36,13 @@ class Game
 
 	public function start()
 	{
-		$this->deck = new Deck();
-		$this->deck->setGame($this);
+		$this->pack = new Pack();
+		$this->pack->setGame($this);
 	}
 
-	public function getDeck()
+	public function getPack()
 	{
-		return $this->deck;
+		return $this->pack;
 	}
 
 	public function addCardToGame(Card $card)

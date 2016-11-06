@@ -152,6 +152,12 @@
 					$cardToMove.css('top', payload[2] + '%');
 					break;
 				}
+				case 'packsize': {
+					if (payload[0] == 0) {
+						$('#pile').hide();
+					}
+					break;
+				}
 				case 'draw': {
 					if (payload[0] == 'opposing') {
 						var $opposingCard = $('<img src="img/cards/back.jpg" style="width: 100px; height: 140px;" class="opposingcard" />');

@@ -1,16 +1,15 @@
 <?php
 namespace Cards;
 
-class Deck
+use Countable;
+use LogicException;
+
+class Deck implements Countable
 {
 	/**
 	 * @var Card[]
 	 */
 	private $cards = [];
-	/**
-	 * @var Game
-	 */
-	private $game;
 
 	public function __construct()
 	{
@@ -44,17 +43,21 @@ class Deck
 		shuffle($this->cards);
 	}
 
-	public function draw()
+	public function count()
 	{
-		$card = array_pop($this->cards);
-		$game = $this->game;
-		$game->addCardToGame($card);
-		$game->sendToOwnPlayer('draw;' . $card->getId() . ';' . $card->getShortCode());
-		$game->sendToOpposingPlayers('draw;opposing');
+		return count($this->cards);
 	}
 
-	public function setGame(Game $game)
+	public function canBeDrawnFrom()
 	{
-		$this->game = $game;
+		return count($this) > 0;
+	}
+
+	public function draw()
+	{
+		if (empty($this->cards)) {
+			throw new LogicException('Deck is empty, can not draw from it again.');
+		}
+		return array_pop($this->cards);
 	}
 }

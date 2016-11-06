@@ -84,7 +84,7 @@ class Router implements MessageComponentInterface
 				/** @var Game $game */
 				$game = $this->games->current();
 				$game->setCurrentPlayerByConnection($from);
-				$game->getDeck()->draw();
+				$game->getPack()->draw();
 				break;
 			}
 			case 'show': {
