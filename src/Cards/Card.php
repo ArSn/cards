@@ -39,13 +39,21 @@ class Card
 		}
 	}
 
+	private function isNumericValueOutOfRange($value)
+	{
+		return is_numeric($value) && $value < 2 && $value > 10;
+	}
+
+	private function isFaceCardUnknown($value)
+	{
+		// (J)ack, (Q)ueen, (K)ing, (A)ce, (F)ool aka Joker
+		return is_string($value) && in_array($value, ['J', 'Q', 'K', 'A', 'F']) === false;
+	}
+
 	private function guardAgainstInvalidValue($value)
 	{
-		if ((is_numeric($value) && $value < 2 && $value > 10)
-			// (J)ack, (Q)ueen, (K)ing, (A)ce, (F)ool aka Joker
-			|| is_string($value) && in_array($value, ['J', 'Q', 'K', 'A', 'F']) === false
-		) {
-			throw new InvalidArgumentException('Value "' . $value . '" is invalid.');
+		if ($this->isNumericValueOutOfRange($value) || $this->isFaceCardUnknown($value)) {
+			throw new InvalidArgumentException('Card value "' . $value . '" is invalid.');
 		}
 	}
 
