@@ -9,7 +9,6 @@
 		google.load("jquery", "1.3.2");
 		google.load("jqueryui", "1.7.2");
 	</script>
-	<script type="text/javascript" src="multidraggable/js/ui.multidraggable.js"></script>
 	<style>
 		html, body {
 			width: 100%;
@@ -79,7 +78,7 @@
 		};
 
 		var refreshMultidraggable = function() {
-			$(".multidraggable").multidraggable({
+			$(".multidraggable").draggable({
 				start: function() {
 //					console.log('start');
 				},
