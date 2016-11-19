@@ -50,16 +50,28 @@ class Game
 		$this->cardsInGame[] = $card;
 	}
 
-	public function showCard($cardId)
+	private function findCardById($cardId) : Card
 	{
 		foreach ($this->cardsInGame as $card) {
 			if ($card->getId() == $cardId) {
-				$this->sendToOpposingPlayers('show;' . $card->getId() . ';' . $card->getShortCode());
-				return;
+				return $card;
 			}
 		}
 
-		throw new LogicException('Card with ID "' . $cardId . '" was not found in this deck.');
+		throw new LogicException('Card with ID "' . $cardId . '" was not found in this game.');
+	}
+
+	public function showCard($cardId)
+	{
+		$card = $this->findCardById($cardId);
+		$this->sendToOpposingPlayers('show;' . $card->getId() . ';' . $card->getShortCode());
+	}
+
+	public function tabOrUnTabCard($cardId)
+	{
+		$card = $this->findCardById($cardId);
+		$card->toggleTabbed();
+		$this->sendToOpposingPlayers('tab;' . $card->getId() . ';' . $card->isTabbedAsInteger());
 	}
 
 	public function sendToAllPlayers($msg)

@@ -21,6 +21,7 @@ class Card
 
 	private $value;
 	private $suit;
+	private $tabbed = false;
 
 	public function __construct($suit, $value)
 	{
@@ -61,6 +62,30 @@ class Card
 	public function getId()
 	{
 		return spl_object_hash($this);
+	}
+
+	public function isTabbed() : bool
+	{
+		return $this->tabbed;
+	}
+
+	public function isTabbedAsInteger() : int
+	{
+		return (int)$this->isTabbed();
+	}
+
+	public function setTabbed(bool $tabbed)
+	{
+		$this->tabbed = $tabbed;
+	}
+
+	public function toggleTabbed()
+	{
+		if ($this->isTabbed()) {
+			$this->setTabbed(false);
+		} else {
+			$this->setTabbed(true);
+		}
 	}
 
 	/**

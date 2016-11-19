@@ -90,18 +90,25 @@
 			});
 		};
 
+		var tabCardAccordingToAttribute = function($card) {
+			if ($card.data('tabbed')) {
+				$card.css('transform', 'rotate(90deg)');
+			} else {
+				$card.css('transform', 'rotate(0deg)');
+			}
+		};
+
 		var refreshCommonCardEvents = function() {
 			// todo: tabbing has to be transmitted to other client
 			$('.commoncard').dblclick(function(event) {
 				var $card = $(event.srcElement);
-				var isTabbed = $card.data('tabbed');
-				if (isTabbed) {
-					$card.css('transform', 'rotate(0deg)');
+				if ($card.data('tabbed')) {
 					$card.data('tabbed', false);
 				} else {
-					$card.css('transform', 'rotate(90deg)');
 					$card.data('tabbed', true);
 				}
+				tabCardAccordingToAttribute($card);
+				conn.send('tab;' + $card.data('id'));
 			});
 		};
 
@@ -165,6 +172,13 @@
 					var $cardToMove = $('#card-' + payload[0]);
 					$cardToMove.css('left', payload[1] + '%');
 					$cardToMove.css('top', payload[2] + '%');
+					break;
+				}
+				case 'tab': {
+					var $cardToTab = $('#card-' + payload[0]);
+					console.log(payload[1] == true);
+					$cardToTab.data('tabbed', payload[1] == true);
+					tabCardAccordingToAttribute($cardToTab);
 					break;
 				}
 				case 'packsize': {
