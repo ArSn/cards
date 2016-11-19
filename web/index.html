@@ -116,7 +116,9 @@
 			var $newCard = $('<img src="img/cards/' + code + '.svg" class="multidraggable card ' + type + '" />');
 			$newCard.attr('id', 'card-' + id);
 			$newCard.data('id', id);
+			$newCard.data('tabbed', false);
 			$newCard.appendTo($board);
+			refreshCommonCardEvents();
 
 			return $newCard;
 		};
