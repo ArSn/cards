@@ -32,7 +32,7 @@ class Player implements ConnectionInterface
 	 *
 	 * @return \Ratchet\ConnectionInterface
 	 */
-	function send($data)
+	public function send($data)
 	{
 		return $this->connection->send($data);
 	}
@@ -40,7 +40,7 @@ class Player implements ConnectionInterface
 	/**
 	 * Close the connection
 	 */
-	function close()
+	public function close()
 	{
 		$this->connection->close();
 	}

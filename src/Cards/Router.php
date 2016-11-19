@@ -29,7 +29,7 @@ class Router implements MessageComponentInterface
 	public function onMessage(ConnectionInterface $from, $msg)
 	{
 		echo '----';
-		echo 'Incoming message from ' . $from->resourceId . ': '  . $msg . PHP_EOL;
+		echo 'Incoming message from ' . $from->resourceId . ': ' . $msg . PHP_EOL;
 		$fullMsg = $msg;
 		$parts = explode(';', $msg);
 		$cmd = array_shift($parts);
