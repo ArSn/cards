@@ -42,6 +42,14 @@
 			height: 140px;
 			cursor: pointer;
 		}
+		#discardPile {
+			position: absolute;
+			background-color: cadetblue;
+			left: calc(50% + 60px);
+			top: calc(50% - 80px);
+			width: 160px;
+			height: 160px;
+		}
 		.card {
 			position: absolute;
 			width: 100px;
@@ -61,6 +69,7 @@
 	<div id="opposingHand"></div>
 	<div id="table">
 		<img id="pile" src="img/cards/back.svg" />
+		<div id="discardPile"></div>
 	</div>
 	<div id="ownHand"></div>
 </div>
@@ -72,13 +81,18 @@
 		var dragStop = function(event) {
 			var $card = $(event.srcElement);
 			var $parent = $card.parent();
+
+			if ($parent.attr('id') != 'board') {
+				return;
+			}
+
 			var left = (parseInt($card.css('left')) / $parent[0].clientWidth) * 100;
 			var top = (parseInt($card.css('top')) / $parent[0].clientHeight) * 100;
 			conn.send('move;' + $card.data('id') + ';' + left + ';' + top);
 		};
 
-		var refreshMultidraggable = function() {
-			$(".multidraggable").draggable({
+		var refreshMovable = function() {
+			$(".movable").draggable({
 				start: function() {
 //					console.log('start');
 				},
@@ -113,7 +127,7 @@
 
 		var addCardToBoard = function(code, id, type) {
 			var $board = $('#board');
-			var $newCard = $('<img src="img/cards/' + code + '.svg" class="multidraggable card ' + type + '" />');
+			var $newCard = $('<img src="img/cards/' + code + '.svg" class="movable card ' + type + '" />');
 			$newCard.attr('id', 'card-' + id);
 			$newCard.data('id', id);
 			$newCard.data('tabbed', false);
@@ -121,6 +135,17 @@
 			refreshCommonCardEvents();
 
 			return $newCard;
+		};
+
+		var putCardOnDiscardPile = function($card) {
+			// Disable handling
+			$card.removeClass('movable');
+			$card.draggable('disable');
+			$card.unbind('dblclick');
+			// Visuals
+			$card.appendTo('#discardPile');
+			$card.css('left', '30px');
+			$card.css('top', '10px');
 		};
 
 		var conn = new WebSocket('ws://localhost:8080');
@@ -166,7 +191,7 @@
 				case 'show': {
 					$opposingHand.find('.opposingcard')[0].remove();
 					addCardToBoard(payload[1], payload[0], 'commoncard');
-					refreshMultidraggable();
+					refreshMovable();
 					break;
 				}
 				case 'move': {
@@ -211,7 +236,7 @@
 						$newCard.css('left', (mostRight.position().left + 50) + 'px');
 					}
 
-					refreshMultidraggable();
+					refreshMovable();
 					break;
 				}
 			}
@@ -238,6 +263,15 @@
 					dragStop(event);
 					refreshCommonCardEvents();
 				}
+			}
+		});
+
+		$('#discardPile').droppable({
+			greedy: true,
+			drop: function( event ) {
+				var $card = $(event.srcElement);
+				putCardOnDiscardPile($card);
+				conn.send('discard;' + $card.data('id'));
 			}
 		});
 
