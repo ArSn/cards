@@ -28,7 +28,7 @@ class Game
 	public function __construct(Player $player1, Player $player2)
 	{
 		$this->players = new SplObjectStorage();
-		$this->discardPile = new Pile($this);
+		$this->discardPile = new Pile();
 		$this->addPlayer($player1);
 		$this->addPlayer($player2);
 	}
@@ -84,6 +84,12 @@ class Game
 		$card = $this->findCardById($cardId);
 		$this->discardPile->add($card);
 		$this->sendToOpposingPlayers('discard;' . $card->getId() . ';' . $card->getShortCode());
+
+		// 2s and fools have to be tabbed on discard pile according to canasta (default game mode) rules
+		if ($card->getValue() == 2 || $card->getValue() == 'F') {
+			$card->setTabbed(true);
+			$this->sendToAllPlayers('tab;' . $card->getId() . ';' . $card->isTabbedAsInteger());
+		}
 	}
 
 	public function sendToAllPlayers($msg)
