@@ -201,6 +201,7 @@
 					var $cardToMove = $('#card-' + payload[0]);
 					$cardToMove.css('left', 'calc(' + payload[1] + '% - 50px)');
 					$cardToMove.css('top', 'calc(' + payload[2] + '% - 70px)');
+					reorderBoardCardZIndex();
 					break;
 				}
 				case 'tab': {
