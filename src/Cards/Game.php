@@ -20,10 +20,15 @@ class Game
 	 * @var Card[]
 	 */
 	private $cardsInGame;
+	/**
+	 * @var Pile
+	 */
+	private $discardPile;
 
 	public function __construct(Player $player1, Player $player2)
 	{
 		$this->players = new SplObjectStorage();
+		$this->discardPile = new Pile($this);
 		$this->addPlayer($player1);
 		$this->addPlayer($player2);
 	}
@@ -72,6 +77,13 @@ class Game
 		$card = $this->findCardById($cardId);
 		$card->toggleTabbed();
 		$this->sendToOpposingPlayers('tab;' . $card->getId() . ';' . $card->isTabbedAsInteger());
+	}
+
+	public function discardCard($cardId)
+	{
+		$card = $this->findCardById($cardId);
+		$this->discardPile->add($card);
+		$this->sendToOpposingPlayers('discard;' . $card->getId() . ';' . $card->getShortCode());
 	}
 
 	public function sendToAllPlayers($msg)

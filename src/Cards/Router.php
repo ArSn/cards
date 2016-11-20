@@ -108,6 +108,14 @@ class Router implements MessageComponentInterface
 				$game->tabOrUnTabCard($msg);
 				break;
 			}
+			case 'discard': {
+				$this->games->rewind();
+				/** @var Game $game */
+				$game = $this->games->current();
+				$game->setCurrentPlayerByConnection($from);
+				$game->discardCard($msg);
+				break;
+			}
 			case 'chat':
 			case 'default': {
 				throw new LogicException('Not implemented yet.');

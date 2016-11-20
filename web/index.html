@@ -239,6 +239,18 @@
 					refreshMovable();
 					break;
 				}
+				case 'discard': {
+					var $cardToDiscard = $('#card-' + payload[0]);
+					// Card was on board and was not discarded directly from hand
+					if ($cardToDiscard.length > 0) {
+						putCardOnDiscardPile($cardToDiscard);
+					} else {
+						addCardToBoard(payload[1], payload[0], 'commoncard');
+						$cardToDiscard = $('#card-' + payload[0]);
+						putCardOnDiscardPile($cardToDiscard);
+					}
+					break;
+				}
 			}
 		};
 
