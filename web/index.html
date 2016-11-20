@@ -3,12 +3,8 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Cards</title>
-	<script type="text/javascript" src="http://www.google.com/jsapi"></script>
-	<!--suppress JSUnresolvedVariable -->
-	<script type="text/javascript">
-		google.load("jquery", "1.3.2");
-		google.load("jqueryui", "1.7.2");
-	</script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 	<style>
 		html, body {
 			width: 100%;
@@ -78,8 +74,16 @@
 
 	$(document).ready(function() {
 
-		var dragStop = function(event) {
-			var $card = $(event.srcElement);
+		var reorderBoardCardZIndex = function() {
+			var $cards = $('#board').find('.commoncard');
+			$cards.each(function() {
+				var $card = $(this);
+				$card.css('z-index', parseInt($card.css('left')) + 1000);
+			});
+		};
+
+		var dragStop = function(event, ui) {
+			var $card = ui.draggable;
 			var $parent = $card.parent();
 
 			if ($parent.attr('id') != 'board') {
@@ -89,17 +93,16 @@
 			var left = ((parseInt($card.css('left')) + 50) / $parent[0].clientWidth) * 100;
 			var top = ((parseInt($card.css('top')) + 70) / $parent[0].clientHeight) * 100;
 			conn.send('move;' + $card.data('id') + ';' + left + ';' + top);
+
+			reorderBoardCardZIndex();
 		};
 
 		var refreshMovable = function() {
 			$(".movable").draggable({
-				start: function() {
-//					console.log('start');
-				},
-				drag: function() {
-//					console.log('drag');
-				},
-				stop: dragStop
+				stop: function(event, ui) {
+					$.extend(ui, {draggable: $(this)});
+					dragStop(event, ui);
+				}
 			});
 		};
 
@@ -112,9 +115,8 @@
 		};
 
 		var refreshCommonCardEvents = function() {
-			// todo: tabbing has to be transmitted to other client
-			$('.commoncard').dblclick(function(event) {
-				var $card = $(event.srcElement);
+			$('.commoncard').dblclick(function() {
+				var $card = $(this);
 				if ($card.data('tabbed')) {
 					$card.data('tabbed', false);
 				} else {
@@ -133,6 +135,7 @@
 			$newCard.data('tabbed', false);
 			$newCard.appendTo($board);
 			refreshCommonCardEvents();
+			reorderBoardCardZIndex();
 
 			return $newCard;
 		};
@@ -263,16 +266,16 @@
 		});
 
 		$('#table').droppable({
-			drop: function( event ) {
+			drop: function( event, ui ) {
 
-				var $card = $(event.srcElement);
+				var $card = ui.draggable;
 
 				if ($card.hasClass('owncard')) {
 					$card.removeClass('owncard');
 					$card.addClass('commoncard');
 
 					conn.send('show;' + $card.data('id'));
-					dragStop(event);
+					dragStop(event, ui);
 					refreshCommonCardEvents();
 				}
 			}
@@ -280,8 +283,8 @@
 
 		$('#discardPile').droppable({
 			greedy: true,
-			drop: function( event ) {
-				var $card = $(event.srcElement);
+			drop: function( event, ui ) {
+				var $card = ui.draggable;
 				putCardOnDiscardPile($card);
 				conn.send('discard;' + $card.data('id'));
 			}
