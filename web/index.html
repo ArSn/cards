@@ -147,6 +147,7 @@
 			$newCard.data('tabbed', false);
 			$newCard.appendTo($board);
 			refreshCommonCardEvents();
+			refreshMovable();
 			reorderBoardCardZIndex();
 
 			return $newCard;
@@ -206,7 +207,6 @@
 				case 'show': {
 					$opposingHand.find('.opposingcard')[0].remove();
 					addCardToBoard(payload[1], payload[0], 'commoncard');
-					refreshMovable();
 					break;
 				}
 				case 'move': {
