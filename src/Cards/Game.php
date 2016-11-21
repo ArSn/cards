@@ -84,6 +84,7 @@ class Game
 		$card = $this->findCardById($cardId);
 		$this->discardPile->add($card);
 		$this->sendToOpposingPlayers('discard;' . $card->getId() . ';' . $card->getShortCode());
+		$this->sendToAllPlayers('discardsize;' . count($this->discardPile));
 
 		// 2s and fools have to be tabbed on discard pile according to canasta (default game mode) rules
 		if ($card->getValue() == 2 || $card->getValue() == 'F') {

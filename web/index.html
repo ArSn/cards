@@ -11,6 +11,7 @@
 			height: 100%;
 			padding: 0;
 			margin: 0;
+			font-family: Verdana, Helvetica, sans-serif;
 		}
 		#board {
 			display: none;
@@ -46,6 +47,15 @@
 			width: 160px;
 			height: 160px;
 		}
+		#discardControls {
+			position: relative;
+			top: -20px;
+			background-color: gold;
+			height: 20px;
+		}
+		#grabDiscardPileButton {
+			cursor: pointer;
+		}
 		.card {
 			position: absolute;
 			width: 100px;
@@ -65,7 +75,9 @@
 	<div id="opposingHand"></div>
 	<div id="table">
 		<img id="pile" src="img/cards/back.svg" />
-		<div id="discardPile"></div>
+		<div id="discardPile">
+			<div id="discardControls"><span id="discardCounter">0</span> <a id="grabDiscardPileButton">Take</a></div>
+		</div>
 	</div>
 	<div id="ownHand"></div>
 </div>
@@ -217,6 +229,10 @@
 					}
 					break;
 				}
+				case 'discardsize': {
+					$('#discardCounter').text(payload[0]);
+					break;
+				}
 				case 'draw': {
 					if (payload[0] == 'opposing') {
 						var $opposingCard = $('<img src="img/cards/back.svg" style="width: 100px; height: 140px;" class="opposingcard" />');
@@ -289,6 +305,10 @@
 				putCardOnDiscardPile($card);
 				conn.send('discard;' + $card.data('id'));
 			}
+		});
+
+		$('#grabDiscardPileButton').click(function() {
+			alert('dummy procedure for taking all cards');
 		});
 
 	});
