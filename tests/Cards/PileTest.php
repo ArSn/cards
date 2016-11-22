@@ -1,9 +1,11 @@
 <?php
 
+namespace CardTests;
+
 use Cards\Pile;
 use PHPUnit\Framework\TestCase;
 
-class MoneyTest extends TestCase
+class PileTest extends TestCase
 {
 	public function testPileIsEmptyAfterCreation()
 	{
