@@ -25,7 +25,7 @@ $(document).ready(function () {
 
     var refreshMovable = function () {
         $(".movable").draggable({
-            start: function(event, ui) {
+            start: function() {
                 $(this).css('z-index', 5000);
             },
             stop: function (event, ui) {
