@@ -2,8 +2,10 @@
 namespace Cards;
 
 use LogicException;
+use Ratchet\AbstractConnectionDecorator;
 use Ratchet\MessageComponentInterface;
 use Ratchet\ConnectionInterface;
+use RuntimeException;
 use SplObjectStorage;
 
 class Router implements MessageComponentInterface
@@ -19,17 +21,25 @@ class Router implements MessageComponentInterface
 		$this->games = new SplObjectStorage();
 	}
 
+	private function getConnectionId(ConnectionInterface $connection)
+	{
+		if ($connection instanceof AbstractConnectionDecorator) {
+			return $connection->resourceId;
+		}
+		throw new RuntimeException('Connection ID can not be determined for this connection.');
+	}
+
 	public function onOpen(ConnectionInterface $conn)
 	{
 		$this->clients->attach($conn);
 
-		echo "New connection! ({$conn->resourceId})\n";
+		echo "New connection! (" . $this->getConnectionId($conn) . ")\n";
 	}
 
 	public function onMessage(ConnectionInterface $from, $msg)
 	{
 		echo '----';
-		echo 'Incoming message from ' . $from->resourceId . ': ' . $msg . PHP_EOL;
+		echo 'Incoming message from ' . $this->getConnectionId($from) . ': ' . $msg . PHP_EOL;
 		$fullMsg = $msg;
 		$parts = explode(';', $msg);
 		$cmd = array_shift($parts);
@@ -127,7 +137,7 @@ class Router implements MessageComponentInterface
 		}
 
 		$numRecv = count($this->clients) - ($sendToAll ? 0 : 1);
-		echo 'Connection ' . $from->resourceId . ' sending message "' . var_export($result, true) .
+		echo 'Connection ' . $this->getConnectionId($from) . ' sending message "' . var_export($result, true) .
 			'" to ' . $numRecv . ' other connection(s)' . "\n";
 
 		foreach ($this->clients as $client) {
@@ -143,7 +153,7 @@ class Router implements MessageComponentInterface
 		// The connection is closed, remove it, as we can no longer send it messages
 		$this->clients->detach($conn);
 
-		echo "Connection {$conn->resourceId} has disconnected\n";
+		echo "Connection " . $this->getConnectionId($conn) . " has disconnected\n";
 	}
 
 	public function onError(ConnectionInterface $conn, \Exception $e)
