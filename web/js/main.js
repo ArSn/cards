@@ -25,6 +25,9 @@ $(document).ready(function () {
 
     var refreshMovable = function () {
         $(".movable").draggable({
+            start: function(event, ui) {
+                $(this).css('z-index', 5000);
+            },
             stop: function (event, ui) {
                 $.extend(ui, {draggable: $(this)});
                 dragStop(event, ui);
@@ -68,6 +71,11 @@ $(document).ready(function () {
     };
 
     var putCardOnDiscardPile = function ($card) {
+        // Cards on discard pile can never be own cards
+        if ($card.hasClass('owncard')) {
+            $card.removeClass('owncard');
+            $card.addClass('commoncard');
+        }
         // Disable handling
         $card.removeClass('movable');
         $card.draggable('disable');
@@ -76,6 +84,8 @@ $(document).ready(function () {
         $card.appendTo('#discardPile');
         $card.css('left', '30px');
         $card.css('top', '10px');
+
+        reorderBoardCardZIndex();
     };
 
     var conn = new WebSocket('ws://localhost:8080');
