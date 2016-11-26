@@ -1,5 +1,7 @@
 $(document).ready(function () {
 
+    const conn = new WebSocket('ws://localhost:8080');
+
     const reorderBoardCardZIndex = function () {
         const $cards = $('#board').find('.card');
         $cards.each(function () {
@@ -88,7 +90,6 @@ $(document).ready(function () {
         reorderBoardCardZIndex();
     };
 
-    const conn = new WebSocket('ws://localhost:8080');
     conn.onopen = function () {
         console.log("Connection established!");
 
