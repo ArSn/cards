@@ -1,7 +1,7 @@
 $(document).ready(function () {
 
     var reorderBoardCardZIndex = function () {
-        var $cards = $('#board').find('.commoncard');
+        var $cards = $('#board').find('.card');
         $cards.each(function () {
             var $card = $(this);
             $card.css('z-index', parseInt($card.css('left')) + 1000);
@@ -186,6 +186,7 @@ $(document).ready(function () {
                 }
 
                 refreshMovable();
+                reorderBoardCardZIndex();
                 break;
             }
             case 'discard': {
