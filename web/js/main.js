@@ -1,6 +1,7 @@
 $(document).ready(function () {
 
     const conn = new WebSocket('ws://localhost:8080');
+    let localPlayerName;
 
     const reorderBoardCardZIndex = function () {
         const $cards = $('#board').find('.card');
@@ -96,6 +97,7 @@ $(document).ready(function () {
         const name = prompt('name?');
         if (typeof name !== 'undefined') {
             conn.send('name;' + name);
+            localPlayerName = name;
         }
     };
 
@@ -207,6 +209,25 @@ $(document).ready(function () {
                 $('<p></p>').text(prefix + payload.join(';')).appendTo('#messages');
                 let $messages = $('#messages');
                 $messages.scrollTop($messages[0].scrollHeight);
+                break;
+            }
+            case 'currentPlayer': {
+                let $status = $('#status');
+                let $content = $('<span />');
+                if (payload[0] == localPlayerName) {
+                    $content.text('Your turn, ' + localPlayerName + '! ');
+                    $('<a />').text('Done').click(function() {
+                        conn.send('endTurn');
+                    }).appendTo($content);
+                    $status.addClass('ownTurn');
+                    $status.removeClass('opposingTurn');
+                } else {
+                    $content.text(payload[0] + 's turn. ');
+                    $status.addClass('opposingTurn');
+                    $status.removeClass('ownTurn');
+                }
+                $status.html('');
+                $content.appendTo($status);
                 break;
             }
         }

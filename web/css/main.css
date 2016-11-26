@@ -27,9 +27,25 @@ html, body {
     float: left;
 }
 
+#status {
+    height: 30px;
+    padding: 5px;
+    width: 100%;
+    box-sizing: border-box;
+    line-height: 20px;
+}
+
+#status.ownTurn {
+    background-color: #7fff7c;
+}
+
+#status.opposingTurn {
+    background-color: #ff7f84;
+}
+
 #messages {
     width: 100%;
-    height: calc(100% - 30px);
+    height: calc(100% - 60px);
     padding: 5px;
     box-sizing: border-box;
     overflow-y: scroll;
@@ -84,10 +100,12 @@ html, body {
     top: -20px;
     background-color: gold;
     height: 20px;
+    line-height: 20px;
 }
 
-#grabDiscardPileButton {
+a {
     cursor: pointer;
+    border: 1px dashed black;
 }
 
 .card {

@@ -89,6 +89,14 @@ class Router implements MessageComponentInterface
 
 				break;
 			}
+			case 'endTurn': {
+				$this->games->rewind();
+				/** @var Game $game */
+				$game = $this->games->current();
+				$game->setCurrentPlayerByConnection($from);
+				$game->endTurn();
+				break;
+			}
 			case 'draw': {
 				$this->games->rewind();
 				/** @var Game $game */

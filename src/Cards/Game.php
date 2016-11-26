@@ -10,8 +10,14 @@ class Game
 	 * @var SplObjectStorage|Player[]
 	 */
 	private $players;
-
+	/**
+	 * @var Player Player whos turn it currently is.
+	 */
 	private $currentPlayer;
+	/**
+	 * @var Player Player who sends the current message that triggers any game logic.
+	 */
+	private $sendingPlayer;
 	/**
 	 * @var Pack
 	 */
@@ -48,6 +54,10 @@ class Game
 	{
 		$this->pack = new Pack();
 		$this->pack->setGame($this);
+
+		// Random player shall start
+		$allPlayers = $this->getAllPlayers();
+		$this->setCurrentPlayer($allPlayers[array_rand($allPlayers)]);
 	}
 
 	public function getPack()
@@ -55,9 +65,9 @@ class Game
 		return $this->pack;
 	}
 
-	public function getCurrentPlayer() : Player
+	public function getSendingPlayer() : Player
 	{
-		return $this->currentPlayer;
+		return $this->sendingPlayer;
 	}
 
 	public function getChat() : Chat
@@ -120,6 +130,34 @@ class Game
 		$this->sendToAllPlayers('clearDiscardPile');
 	}
 
+	/**
+	 * @return Player[]
+	 */
+	private function getAllPlayers() : array
+	{
+		$players = [];
+		foreach ($this->players as $player) {
+			$players[] = $player;
+		}
+		return $players;
+	}
+
+	private function setCurrentPlayer(Player $player)
+	{
+		$this->currentPlayer = $player;
+		$this->sendToAllPlayers('currentPlayer;' . $player->getName());
+	}
+
+	public function endTurn()
+	{
+		foreach ($this->players as $player) {
+			if ($player != $this->currentPlayer) {
+				$this->setCurrentPlayer($player);
+				return;
+			}
+		}
+	}
+
 	public function sendToAllPlayers($msg)
 	{
 		foreach ($this->players as $player) {
@@ -130,7 +168,7 @@ class Game
 	public function sendToOpposingPlayers($msg)
 	{
 		foreach ($this->players as $player) {
-			if ($player != $this->currentPlayer) {
+			if ($player != $this->sendingPlayer) {
 				$player->send($msg);
 			}
 		}
@@ -139,7 +177,7 @@ class Game
 	public function sendToOwnPlayer($msg)
 	{
 		foreach ($this->players as $player) {
-			if ($player == $this->currentPlayer) {
+			if ($player == $this->sendingPlayer) {
 				$player->send($msg);
 			}
 		}
@@ -149,7 +187,7 @@ class Game
 	{
 		foreach ($this->players as $player) {
 			if ($from == $player->getConnection()) {
-				$this->currentPlayer = $player;
+				$this->sendingPlayer = $player;
 			}
 		}
 	}

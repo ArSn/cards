@@ -13,7 +13,7 @@ class Chat
 	public function say($message)
 	{
 		$game = $this->game;
-		$playerName = $game->getCurrentPlayer()->getName();
+		$playerName = $game->getSendingPlayer()->getName();
 
 		$game->sendToAllPlayers('chat;' . $playerName . ': ' . $message);
 	}
