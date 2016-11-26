@@ -1,29 +1,29 @@
 $(document).ready(function () {
 
-    var reorderBoardCardZIndex = function () {
-        var $cards = $('#board').find('.card');
+    const reorderBoardCardZIndex = function () {
+        const $cards = $('#board').find('.card');
         $cards.each(function () {
-            var $card = $(this);
+            const $card = $(this);
             $card.css('z-index', parseInt($card.css('left')) + 1000);
         });
     };
 
-    var dragStop = function (event, ui) {
-        var $card = ui.draggable;
-        var $parent = $card.parent();
+    const dragStop = function (event, ui) {
+        const $card = ui.draggable;
+        const $parent = $card.parent();
 
         if ($parent.attr('id') != 'board') {
             return;
         }
 
-        var left = ((parseInt($card.css('left')) + 50) / $parent[0].clientWidth) * 100;
-        var top = ((parseInt($card.css('top')) + 70) / $parent[0].clientHeight) * 100;
+        const left = ((parseInt($card.css('left')) + 50) / $parent[0].clientWidth) * 100;
+        const top = ((parseInt($card.css('top')) + 70) / $parent[0].clientHeight) * 100;
         conn.send('move;' + $card.data('id') + ';' + left + ';' + top);
 
         reorderBoardCardZIndex();
     };
 
-    var refreshMovable = function () {
+    const refreshMovable = function () {
         $(".movable").draggable({
             start: function() {
                 $(this).css('z-index', 5000);
@@ -35,7 +35,7 @@ $(document).ready(function () {
         });
     };
 
-    var tabCardAccordingToAttribute = function ($card) {
+    const tabCardAccordingToAttribute = function ($card) {
         if ($card.data('tabbed')) {
             $card.css('transform', 'rotate(90deg)');
         } else {
@@ -43,9 +43,9 @@ $(document).ready(function () {
         }
     };
 
-    var refreshCommonCardEvents = function () {
+    const refreshCommonCardEvents = function () {
         $('.commoncard').dblclick(function () {
-            var $card = $(this);
+            const $card = $(this);
             if ($card.data('tabbed')) {
                 $card.data('tabbed', false);
             } else {
@@ -56,9 +56,9 @@ $(document).ready(function () {
         });
     };
 
-    var addCardToBoard = function (code, id, type) {
-        var $board = $('#board');
-        var $newCard = $('<img src="img/cards/' + code + '.svg" class="movable card ' + type + '" />');
+    const addCardToBoard = function (code, id, type) {
+        const $board = $('#board');
+        const $newCard = $('<img src="img/cards/' + code + '.svg" class="movable card ' + type + '" />');
         $newCard.attr('id', 'card-' + id);
         $newCard.data('id', id);
         $newCard.data('tabbed', false);
@@ -70,7 +70,7 @@ $(document).ready(function () {
         return $newCard;
     };
 
-    var putCardOnDiscardPile = function ($card) {
+    const putCardOnDiscardPile = function ($card) {
         // Cards on discard pile can never be own cards
         if ($card.hasClass('owncard')) {
             $card.removeClass('owncard');
@@ -88,11 +88,11 @@ $(document).ready(function () {
         reorderBoardCardZIndex();
     };
 
-    var conn = new WebSocket('ws://localhost:8080');
+    const conn = new WebSocket('ws://localhost:8080');
     conn.onopen = function () {
         console.log("Connection established!");
 
-        var name = prompt('name?');
+        const name = prompt('name?');
         if (typeof name !== 'undefined') {
             conn.send('name;' + name);
         }
@@ -100,19 +100,17 @@ $(document).ready(function () {
 
     conn.onmessage = function (e) {
         console.log('message received: ' + e.data);
-        var payload = e.data.split(';');
-        var command = payload[0];
+        let payload = e.data.split(';');
+        const command = payload[0];
         payload.splice(0, 1);
 
-        var $newCard;
-        var $opposingHand = $('#opposingHand');
+        const $opposingHand = $('#opposingHand');
 
         switch (command) {
             case 'lobby': {
-                var name;
-                var $playerList = $('#playerList');
+                const $playerList = $('#playerList');
                 $playerList.html('');
-                for (name of payload) {
+                for (let name of payload) {
                     name = $('<li>').html(name);
                     name.appendTo($playerList);
                 }
@@ -134,15 +132,14 @@ $(document).ready(function () {
                 break;
             }
             case 'move': {
-                var $cardToMove = $('#card-' + payload[0]);
+                const $cardToMove = $('#card-' + payload[0]);
                 $cardToMove.css('left', 'calc(' + payload[1] + '% - 50px)');
                 $cardToMove.css('top', 'calc(' + payload[2] + '% - 70px)');
                 reorderBoardCardZIndex();
                 break;
             }
             case 'tab': {
-                var $cardToTab = $('#card-' + payload[0]);
-                console.log(payload[1] == true);
+                const $cardToTab = $('#card-' + payload[0]);
                 $cardToTab.data('tabbed', payload[1] == true);
                 tabCardAccordingToAttribute($cardToTab);
                 break;
@@ -164,19 +161,19 @@ $(document).ready(function () {
             }
             case 'draw': {
                 if (payload[0] == 'opposing') {
-                    var $opposingCard = $('<img src="img/cards/back.svg" style="width: 100px; height: 140px;" class="opposingcard" />');
+                    const $opposingCard = $('<img src="img/cards/back.svg" style="width: 100px; height: 140px;" class="opposingcard" />');
                     $opposingCard.appendTo($opposingHand);
                     break;
                 }
-                var $ownHand = $('#ownHand');
-                $newCard = addCardToBoard(payload[1], payload[0], 'owncard');
+                const $ownHand = $('#ownHand');
+                const $newCard = addCardToBoard(payload[1], payload[0], 'owncard');
                 $newCard.css('top', $ownHand.position().top + 'px');
 
-                var $ownCards = $('.owncard');
+                const $ownCards = $('.owncard');
                 if ($ownCards.length > 1) {
-                    var mostRight;
+                    let mostRight;
                     $ownCards.each(function (index, card) {
-                        var $card = $(card);
+                        const $card = $(card);
                         if (mostRight == null || $card.position().left > mostRight.position().left) {
                             mostRight = $card;
                         }
@@ -190,7 +187,8 @@ $(document).ready(function () {
                 break;
             }
             case 'discard': {
-                var $cardToDiscard = $('#card-' + payload[0]);
+                //noinspection JSJQueryEfficiency
+                let $cardToDiscard = $('#card-' + payload[0]);
                 // Card was on board and was not discarded directly from hand
                 if ($cardToDiscard.length > 0) {
                     putCardOnDiscardPile($cardToDiscard);
@@ -224,7 +222,7 @@ $(document).ready(function () {
     $('#table').droppable({
         drop: function (event, ui) {
 
-            var $card = ui.draggable;
+            const $card = ui.draggable;
 
             if ($card.hasClass('owncard')) {
                 $card.removeClass('owncard');
@@ -240,7 +238,7 @@ $(document).ready(function () {
     $('#discardPile').droppable({
         greedy: true,
         drop: function (event, ui) {
-            var $card = ui.draggable;
+            let $card = ui.draggable;
             putCardOnDiscardPile($card);
             conn.send('discard;' + $card.data('id'));
         }
