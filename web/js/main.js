@@ -157,6 +157,11 @@ $(document).ready(function () {
                 $('#discardCounter').text(payload[0]);
                 break;
             }
+            case 'clearDiscardPile': {
+                $('#discardCounter').text(0);
+                $('#discardPile').find('.card').remove();
+                break;
+            }
             case 'draw': {
                 if (payload[0] == 'opposing') {
                     var $opposingCard = $('<img src="img/cards/back.svg" style="width: 100px; height: 140px;" class="opposingcard" />');
@@ -233,7 +238,7 @@ $(document).ready(function () {
     });
 
     $('#grabDiscardPileButton').click(function () {
-        alert('dummy procedure for taking all cards');
+        conn.send('pickupDiscardPile');
     });
 
 });

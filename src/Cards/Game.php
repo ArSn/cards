@@ -93,6 +93,18 @@ class Game
 		}
 	}
 
+	public function pickupDiscardPile()
+	{
+		$cards = $this->discardPile->fetchAll();
+
+		foreach ($cards as $card) {
+			$this->sendToOwnPlayer('draw;' . $card->getId() . ';' . $card->getShortCode());
+			$this->sendToOpposingPlayers('draw;opposing');
+		}
+
+		$this->sendToAllPlayers('clearDiscardPile');
+	}
+
 	public function sendToAllPlayers($msg)
 	{
 		foreach ($this->players as $player) {

@@ -97,6 +97,14 @@ class Router implements MessageComponentInterface
 				$game->getPack()->draw();
 				break;
 			}
+			case 'pickupDiscardPile': {
+				$this->games->rewind();
+				/** @var Game $game */
+				$game = $this->games->current();
+				$game->setCurrentPlayerByConnection($from);
+				$game->pickupDiscardPile();
+				break;
+			}
 			case 'show': {
 				$this->games->rewind();
 				/** @var Game $game */
