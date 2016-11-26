@@ -192,6 +192,7 @@ $(document).ready(function () {
                     addCardToBoard(payload[1], payload[0], 'commoncard');
                     $cardToDiscard = $('#card-' + payload[0]);
                     putCardOnDiscardPile($cardToDiscard);
+                    $opposingHand.find('.opposingcard')[0].remove();
                 }
                 break;
             }
