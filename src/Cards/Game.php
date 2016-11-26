@@ -24,11 +24,16 @@ class Game
 	 * @var Pile
 	 */
 	private $discardPile;
+	/**
+	 * @var Chat
+	 */
+	private $chat;
 
 	public function __construct(Player $player1, Player $player2)
 	{
 		$this->players = new SplObjectStorage();
 		$this->discardPile = new Pile();
+		$this->chat = new Chat($this);
 		$this->addPlayer($player1);
 		$this->addPlayer($player2);
 	}
@@ -48,6 +53,16 @@ class Game
 	public function getPack()
 	{
 		return $this->pack;
+	}
+
+	public function getCurrentPlayer() : Player
+	{
+		return $this->currentPlayer;
+	}
+
+	public function getChat() : Chat
+	{
+		return $this->chat;
 	}
 
 	public function addCardToGame(Card $card)

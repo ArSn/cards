@@ -124,7 +124,7 @@ $(document).ready(function () {
             case 'game': {
                 if (payload == 'start') {
                     $('#lobby').hide();
-                    $('#board').show();
+                    $('#game').show();
                 }
                 break;
             }
@@ -202,6 +202,14 @@ $(document).ready(function () {
                 }
                 break;
             }
+            case 'chat': {
+                let now = new Date();
+                let prefix = now.getHours() + ':' + now.getMinutes() + ':' + now.getSeconds() + ' ';
+                $('<p></p>').text(prefix + payload.join(';')).appendTo('#messages');
+                let $messages = $('#messages');
+                $messages.scrollTop($messages[0].scrollHeight);
+                break;
+            }
         }
     };
 
@@ -240,6 +248,16 @@ $(document).ready(function () {
 
     $('#grabDiscardPileButton').click(function () {
         conn.send('pickupDiscardPile');
+    });
+
+    $('#chatInput').keydown(function(event) {
+        if (event.which == 13) {
+            let inputText = $(this).val();
+            if (inputText) {
+                conn.send('chat;' + $(this).val());
+                $(this).val('');
+            }
+        }
     });
 
 });

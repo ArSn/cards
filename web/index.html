@@ -16,15 +16,21 @@
 	</ul>
 	<button id="startButton" style="display: none;">Start</button>
 </div>
-<div id="board">
-	<div id="opposingHand"></div>
-	<div id="table">
-		<img id="pile" src="img/cards/back.svg" />
-		<div id="discardPile">
-			<div id="discardControls"><span id="discardCounter">0</span> <a id="grabDiscardPileButton">Take</a></div>
+<div id="game">
+	<div id="board">
+		<div id="opposingHand"></div>
+		<div id="table">
+			<img id="pile" src="img/cards/back.svg" />
+			<div id="discardPile">
+				<div id="discardControls"><span id="discardCounter">0</span> <a id="grabDiscardPileButton">Take</a></div>
+			</div>
 		</div>
+		<div id="ownHand"></div>
 	</div>
-	<div id="ownHand"></div>
+	<div id="chat">
+		<div id="messages"></div>
+		<input type="text" id="chatInput" />
+	</div>
 </div>
 </body>
 
