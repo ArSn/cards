@@ -162,7 +162,7 @@ $(document).ready(function () {
             }
             case 'draw': {
                 if (payload[0] == 'opposing') {
-                    const $opposingCard = $('<img src="img/cards/back.svg" style="width: 100px; height: 140px;" class="opposingcard" />');
+                    const $opposingCard = $('<img src="img/cards/back.svg" class="card opposingcard" />');
                     $opposingCard.appendTo($opposingHand);
                     break;
                 }

@@ -13,6 +13,7 @@ html, body {
 }
 
 #board {
+    position: relative;
     width: 80%;
     height: 100%;
     float: left;
@@ -90,7 +91,10 @@ html, body {
 }
 
 .card {
-    position: absolute;
     width: 100px;
     height: 140px;
+}
+
+.owncard, .commoncard {
+    position: absolute;
 }
