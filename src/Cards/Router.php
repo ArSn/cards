@@ -171,8 +171,53 @@ class Router implements MessageComponentInterface
 		}
 	}
 
+	private function findPlayerByConnection(ConnectionInterface $connection)
+	{
+		/** @var Game $game */
+		foreach ($this->games as $game) {
+			foreach ($game->getPlayers() as $player) {
+				if ($player->getConnection() == $connection) {
+					return $player;
+				}
+			}
+		}
+
+		foreach ($this->lobby as $player) {
+			if ($player->getConnection() == $connection) {
+				return $player;
+			}
+		}
+
+		return null;
+	}
+
+	private function findGameByConnection(ConnectionInterface $connection)
+	{
+		/** @var Game $game */
+		foreach ($this->games as $game) {
+			foreach ($game->getPlayers() as $player) {
+				if ($player->getConnection() == $connection) {
+					return $game;
+				}
+			}
+		}
+
+		return null;
+	}
+
 	public function onClose(ConnectionInterface $conn)
 	{
+		$game = $this->findGameByConnection($conn);
+		if ($game) {
+			$game->endGame();
+			$this->games->detach($game);
+		}
+
+		$player = $this->findPlayerByConnection($conn);
+		if ($player) {
+			$this->lobby->detach($player);
+		}
+
 		// The connection is closed, remove it, as we can no longer send it messages
 		$this->clients->detach($conn);
 

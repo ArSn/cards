@@ -132,6 +132,10 @@ $(document).ready(function () {
                     $('#lobby').hide();
                     $('#game').show();
                 }
+                if (payload == 'end') {
+                    alert('The game has ended. You will now be redirected to the lobby.');
+                    window.location.href = '/';
+                }
                 break;
             }
             case 'show': {

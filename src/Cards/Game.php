@@ -56,7 +56,7 @@ class Game
 		$this->pack->setGame($this);
 
 		// Random player shall start
-		$allPlayers = $this->getAllPlayers();
+		$allPlayers = $this->getPlayers();
 		$this->setCurrentPlayer($allPlayers[array_rand($allPlayers)]);
 	}
 
@@ -133,7 +133,7 @@ class Game
 	/**
 	 * @return Player[]
 	 */
-	private function getAllPlayers() : array
+	public function getPlayers() : array
 	{
 		$players = [];
 		foreach ($this->players as $player) {
@@ -156,6 +156,11 @@ class Game
 				return;
 			}
 		}
+	}
+
+	public function endGame()
+	{
+		$this->sendToAllPlayers('game;end');
 	}
 
 	public function sendToAllPlayers($msg)
