@@ -19,8 +19,8 @@ $(document).ready(function () {
             return;
         }
 
-        const left = ((parseInt($card.css('left')) + 50) / $parent[0].clientWidth) * 100;
-        const top = ((parseInt($card.css('top')) + 70) / $parent[0].clientHeight) * 100;
+        const left = (parseInt($card.css('left')) / $parent[0].clientWidth) * 100;
+        const top = ((parseInt($card.css('top')) + 140) / $parent[0].clientHeight) * 100;
         conn.send('move;' + $card.data('id') + ';' + left + ';' + top);
 
         reorderBoardCardZIndex();
@@ -145,9 +145,12 @@ $(document).ready(function () {
             }
             case 'move': {
                 const $cardToMove = $('#card-' + payload[0]);
-                $cardToMove.css('left', 'calc(' + payload[1] + '% - 50px)');
-                $cardToMove.css('top', 'calc(' + payload[2] + '% - 70px)');
-                reorderBoardCardZIndex();
+                $cardToMove.animate({
+                    left: payload[1] + '%',
+                    top: payload[2] + '%'
+                }, {
+                    complete: reorderBoardCardZIndex
+                });
                 break;
             }
             case 'tab': {
