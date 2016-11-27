@@ -1,6 +1,6 @@
 $(document).ready(function () {
 
-    const conn = new WebSocket('ws://localhost:8080');
+    const conn = new WebSocket('ws://' + window.location.hostname + ':8080');
     let localPlayerName;
 
     const reorderBoardCardZIndex = function () {
