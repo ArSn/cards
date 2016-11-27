@@ -91,14 +91,19 @@ $(document).ready(function () {
         reorderBoardCardZIndex();
     };
 
+    const askForName = function() {
+        const name = prompt('name?');
+        if (name) {
+            return name;
+        }
+        return askForName();
+    };
+
     conn.onopen = function () {
         console.log("Connection established!");
 
-        const name = prompt('name?');
-        if (typeof name !== 'undefined') {
-            conn.send('name;' + name);
-            localPlayerName = name;
-        }
+        localPlayerName = askForName();
+        conn.send('name;' + localPlayerName);
     };
 
     conn.onmessage = function (e) {
