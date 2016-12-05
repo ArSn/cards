@@ -63,18 +63,20 @@ html, body {
 
 #opposingHand {
     height: 8%;
-    background-color: aqua;
 }
 
 #table {
     height: 84%;
-    background-color: burlywood;
+    background-color: #0F520F;
     position: relative;
 }
 
 #ownHand {
     height: 8%;
-    background-color: chartreuse;
+}
+
+.handArea {
+    background-color: #157C15;
 }
 
 #pile {
@@ -88,7 +90,7 @@ html, body {
 
 #discardPile {
     position: absolute;
-    background-color: cadetblue;
+    background-color: #147E14;
     left: calc(50% + 60px);
     top: calc(50% - 80px);
     width: 160px;
