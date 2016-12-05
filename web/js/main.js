@@ -20,7 +20,7 @@ $(document).ready(function () {
         }
 
         const left = (parseInt($card.css('left')) / $parent[0].clientWidth) * 100;
-        const top = ((parseInt($card.css('top')) + 140) / $parent[0].clientHeight) * 100;
+        const top = ((parseInt($card.css('top')) + 100) / $parent[0].clientHeight) * 100;
         conn.send('move;' + $card.data('id') + ';' + left + ';' + top);
 
         reorderBoardCardZIndex();
@@ -194,7 +194,7 @@ $(document).ready(function () {
                         }
                     });
 
-                    $newCard.css('left', (mostRight.position().left + 50) + 'px');
+                    $newCard.css('left', (mostRight.position().left + 35) + 'px');
                 }
 
                 refreshMovable();
