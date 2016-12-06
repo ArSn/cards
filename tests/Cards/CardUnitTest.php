@@ -33,11 +33,11 @@ class CardUnitTest extends TestCase
 	public function invalidValueProvider()
 	{
 		return [
-			['eiijej'],
-			['uff'],
-			['15'],
+			['8934jegij'],
+			['ieieie'],
+			['23'],
 			[1],
-			[false],
+			[true],
 		];
 	}
 
