@@ -1,5 +1,6 @@
 $(document).ready(function () {
 
+    /** global: WebSocket */
     const conn = new WebSocket('ws://' + window.location.hostname + ':8080');
     let localPlayerName;
 
@@ -113,14 +114,11 @@ $(document).ready(function () {
     };
 
     conn.onopen = function () {
-        console.log("Connection established!");
-
         localPlayerName = askForName();
         conn.send('name;' + localPlayerName);
     };
 
     conn.onmessage = function (e) {
-        console.log('message received: ' + e.data);
         let payload = e.data.split(';');
         const command = payload[0];
         payload.splice(0, 1);
@@ -253,6 +251,10 @@ $(document).ready(function () {
                 }
                 $status.html('');
                 $content.appendTo($status);
+                break;
+            }
+            default: {
+                console.error('Unknown command from server: ', command, payload);
                 break;
             }
         }
