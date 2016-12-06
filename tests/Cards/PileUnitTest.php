@@ -6,7 +6,7 @@ use Cards\Card;
 use Cards\Pile;
 use PHPUnit\Framework\TestCase;
 
-class PileTest extends TestCase
+class PileUnitTest extends TestCase
 {
 	public function testPileIsEmptyAfterCreation()
 	{

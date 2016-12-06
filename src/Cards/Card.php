@@ -41,7 +41,7 @@ class Card
 
 	private function isNumericValueOutOfRange($value)
 	{
-		return is_numeric($value) && $value < 2 && $value > 10;
+		return is_numeric($value) && ($value < 2 || $value > 10);
 	}
 
 	private function isFaceCardUnknown($value)
@@ -50,9 +50,17 @@ class Card
 		return is_string($value) && in_array($value, ['J', 'Q', 'K', 'A', 'F']) === false;
 	}
 
+	private function isValueTypeUnknown($value)
+	{
+		return is_string($value) === false && is_numeric($value) === false;
+	}
+
 	private function guardAgainstInvalidValue($value)
 	{
-		if ($this->isNumericValueOutOfRange($value) || $this->isFaceCardUnknown($value)) {
+		if ($this->isValueTypeUnknown($value)
+			|| $this->isNumericValueOutOfRange($value)
+			|| $this->isFaceCardUnknown($value)
+		) {
 			throw new InvalidArgumentException('Card value "' . $value . '" is invalid.');
 		}
 	}

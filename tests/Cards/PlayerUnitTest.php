@@ -7,7 +7,7 @@ use Cards\Player;
 use PHPUnit\Framework\TestCase;
 use Ratchet\ConnectionInterface;
 
-class PlayerTest extends TestCase
+class PlayerUnitTest extends TestCase
 {
 	private function getConnectionMock()
 	{

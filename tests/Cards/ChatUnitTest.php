@@ -7,7 +7,7 @@ use Cards\Game;
 use Cards\Player;
 use PHPUnit\Framework\TestCase;
 
-class ChatTest extends TestCase
+class ChatUnitTest extends TestCase
 {
 	public function testSaySendsChatMessageToAllPlayers()
 	{
