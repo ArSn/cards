@@ -7,7 +7,7 @@ $(document).ready(function () {
         const $cards = $('#board').find('.card');
         $cards.each(function () {
             const $card = $(this);
-            $card.css('z-index', parseInt($card.css('left')) + 1000);
+            $card.css('z-index', (parseInt($card.css('left')) * parseInt($card.css('top'))) + 1000);
         });
     };
 
@@ -41,7 +41,7 @@ $(document).ready(function () {
     const refreshMovable = function () {
         $(".movable").draggable({
             start: function() {
-                $(this).css('z-index', 5000);
+                $(this).css('z-index', 1500000);
             },
             stop: function (event, ui) {
                 $.extend(ui, {draggable: $(this)});
