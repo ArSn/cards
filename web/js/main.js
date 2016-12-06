@@ -11,6 +11,19 @@ $(document).ready(function () {
         });
     };
 
+    const findCardCoordinates = function($card) {
+
+        const $parent = $card.parent();
+
+        let left = ((parseInt($card.css('left'))) / $parent[0].clientWidth) * 100;
+        let top = ((parseInt($card.css('top')) + 100) / $parent[0].clientHeight) * 100;
+
+        return {
+            left: left,
+            top: top
+        };
+    };
+
     const dragStop = function (event, ui) {
         const $card = ui.draggable;
         const $parent = $card.parent();
@@ -19,9 +32,8 @@ $(document).ready(function () {
             return;
         }
 
-        const left = (parseInt($card.css('left')) / $parent[0].clientWidth) * 100;
-        const top = ((parseInt($card.css('top')) + 100) / $parent[0].clientHeight) * 100;
-        conn.send('move;' + $card.data('id') + ';' + left + ';' + top);
+        const coords = findCardCoordinates($card);
+        conn.send('move;' + $card.data('id') + ';' + coords.left + ';' + coords.top);
 
         reorderBoardCardZIndex();
     };
@@ -34,7 +46,8 @@ $(document).ready(function () {
             stop: function (event, ui) {
                 $.extend(ui, {draggable: $(this)});
                 dragStop(event, ui);
-            }
+            },
+            grid: [ 20, 20 ]
         });
     };
 
@@ -194,7 +207,7 @@ $(document).ready(function () {
                         }
                     });
 
-                    $newCard.css('left', (mostRight.position().left + 35) + 'px');
+                    $newCard.css('left', (mostRight.position().left + 20) + 'px');
                 }
 
                 refreshMovable();
