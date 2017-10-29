@@ -1,7 +1,7 @@
 $(document).ready(function () {
 
     /** global: WebSocket */
-    const conn = new WebSocket('ws://' + window.location.hostname + ':8080');
+    const conn = new WebSocket('wss://' + window.location.hostname.replace('cards.', 'cards-server.'));
     let localPlayerName;
 
     const reorderBoardCardZIndex = function () {

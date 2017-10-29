@@ -1,2 +1,4 @@
 # All hidden files are not important for the project
 .*
+/web/cards.kaz.cool.conf
+/web/Dockerfile
